@@ -1,0 +1,1 @@
+	out of 26585 with nonzero total read count	adjusted p-value < 0.05	LFC > 0 (up)       : 113, 0.43%	LFC < 0 (down)     : 131, 0.49%	outliers [1]       : 0, 0%	[1] see 'cooksCutoff' argument of ?results	see metadata(res)$ihwResult on hypothesis weighting	
