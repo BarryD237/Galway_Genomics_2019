@@ -129,11 +129,15 @@ for (i in 1:nrow(subset_cyto_S2_n)){
   z <- setNames(data.frame("Tyto S2", t(Tyto_S2)), c("celltype", "expr"))
   
   gg_df <- rbind(gg_df, x, y, z)
+	
+  max <- max(gg_df$expr)
+  min <- min(gg_df$expr)
   
   pdf(paste0(gene,".pdf"), height = 3, width = 3)
   plot <- ggbarplot(gg_df, x = "celltype", y = "expr",
             add = c("mean_sd", "jitter"),
             color = "black",
+            ylim = c(min, max),
             position = position_dodge(0.2),
             ggtheme = theme_bw(),
             font.main = "bold",
