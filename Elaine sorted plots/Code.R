@@ -127,11 +127,50 @@ for (i in 1:nrow(subset_cyto_S2_n)){
   x <- setNames(data.frame("Aria S2", t(Aria_S2)), c("celltype", "expr"))
   y <- setNames(data.frame("PA", t(PA)), c("celltype", "expr"))
   z <- setNames(data.frame("Tyto S2", t(Tyto_S2)), c("celltype", "expr"))
-  
-  gg_df <- rbind(gg_df, x, y, z)
 	
-  max <- max(gg_df$expr)
+	
+  #get summary statistics for ggplot:
+  #load dplyr, unload plyr!
+  df.summary <- gg_df %>%
+  group_by(celltype) %>%
+  summarise(
+    sd = sd(expr),
+    expr = mean(expr))
+	
+  #need to calc sd in gg_df to set ylim height (zoom in on high vals)
+  max <- max((gg_df$expr) + 0.5*(gg_df$sd))  
   min <- min(gg_df$expr)
+  
+  pdf(paste0(gene,".pdf"), height = 3, width = 3)
+  
+  plot <- ggplot(gg_df, aes(celltype, expr)) +
+          geom_bar(stat = "identity", data = df.summary,
+                   fill = NA, color = "black", width = 0.5, size = 1.0) +
+          geom_jitter(position = position_jitter(0.0),
+                      color = "black") + 
+          geom_errorbar(aes(ymin = expr, ymax = expr+sd),
+                        data = df.summary, width = 0.25, size=0.2) +
+          theme_pubr() +
+          coord_cartesian(ylim = c(min, max)) +
+          scale_y_continuous(expand = expand_scale(mult = c(0, .1))) +
+          labs(title = paste(gene), y = "Normalized Expression", x = "cell type") +
+          theme(
+                plot.title = element_text(size=12, face="bold"),
+                axis.title.x = element_text(size=12, face="bold"),
+                axis.title.y = element_text(size=12, face="bold")
+        )
+
+  print(plot)
+  dev.off()
+
+# coord_cartesian required or else ylim = c(min,max) does not work. 
+#scale_y_continuous to remove white space at bottom of bar & x-axis
+# the ggbarplot worked really well, but was not able to dictate error bars like ggplot was:
+
+gg_df <- rbind(gg_df, x, y, z)
+	
+  max <- max((gg_df$expr) + 0.5*(gg_df$sd)) 
+  min <- min((gg_df$expr)- 0.5*(gg_df$sd))
   
   pdf(paste0(gene,".pdf"), height = 3, width = 3)
   plot <- ggbarplot(gg_df, x = "celltype", y = "expr",
