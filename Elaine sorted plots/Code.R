@@ -123,10 +123,10 @@ for (i in 1:nrow(subset_cyto_S2_n)){
   PA <- subset(row, select = c(PA_index))
   Tyto_S2 <- subset(row, select = c(TYTO_S2_index))
   
-  gg_df <- setNames(data.frame("Aria", t(Aria)), c("celltype", "expr"))
-  x <- setNames(data.frame("Aria S2", t(Aria_S2)), c("celltype", "expr"))
-  y <- setNames(data.frame("PA", t(PA)), c("celltype", "expr"))
-  z <- setNames(data.frame("Tyto S2", t(Tyto_S2)), c("celltype", "expr"))
+  gg_df <- setNames(data.frame("Aria", t(Aria), sd(Aria)), c("celltype", "expr", "sd"))
+  x <- setNames(data.frame("Aria S2", t(Aria_S2), sd(Aris_S2)), c("celltype", "expr", "sd"))
+  y <- setNames(data.frame("PA", t(PA), sd(PA)), c("celltype", "expr", "sd"))
+  z <- setNames(data.frame("Tyto S2", t(Tyto_S2), sd(Tyto_S2)), c("celltype", "expr", "sd"))
 	
 	
   #get summary statistics for ggplot:
